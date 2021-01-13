@@ -135,11 +135,14 @@ async def makeXpCard(message, user, xp, lvl, nlvl, nxp, rank):
 	### XP DISPLAY ###
 	##################
 	
-	if int(xp) >= 1000:
-		# gets first digit
-		fxp = str(xp)[0]
-		sxp = str(xp)[1]
-		xp = fxp + "." + sxp + "k"
+	if int(xp) >= 1000 and int(xp < 1000000):
+		sig = "k"
+	elif int(xp) >= 1000000 and int(xp < 1000000000):
+		sig = "m"
+	# gets first digit
+	fxp = str(xp)[0]
+	sxp = str(xp)[1]
+	xp = fxp + "." + sxp + sig
 	xpDraw = ImageDraw.Draw(background)
 
         # centers text

@@ -7,23 +7,6 @@ class Settings(commands.Cog):
 	"""setup, welcomechannel"""
 	def __init__(self, bot):
 		self.bot = bot
-	### SETUP ###
-	@commands.command()
-	@commands.has_permissions(administrator=True) 
-	async def botsetup(self, ctx):
-		"""Can only be used once. Shows commands to setup bot"""
-		with open('serverprefs.json', 'r') as s:
-			serverprefs = json.load(s)
-		########################################
-		newserver = await prefs.addServerIfNeeded(serverprefs, ctx.message.channel.guild)
-		### if the server is new, do setup
-		if newserver == False:
-			await ctx.message.channel.send("This server has already gone through setup!")
-		else:
-			await ctx.message.channel.send("Setup commands: `!welcomechannel, !autorole, !prefix'")
-		########################################
-		with open('serverprefs.json', 'w') as s:
-			json.dump(serverprefs, s)
 
 	### WELCOME CHANNEL ###
 	@commands.command()
