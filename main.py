@@ -16,12 +16,10 @@ import meme
 ######################
 ### INITIALIZATION ###
 ######################
-def get_prefix(bot, message):
-	with open('serverprefs.json', 'r') as s:
-		serverprefs = json.load(s)
+async def get_prefix(bot, message):
+	await prefs.checkKeys(message.author.guild)
 	########################################
-	return serverprefs[str(message.guild.id)]['prefix']
-
+	return await prefs.getPfx(message.guild)
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
@@ -50,7 +48,7 @@ async def on_guild_join(guild):
 	def check(event):
 		return event.target.id == bot.user.id
 	bot_entry = await guild.audit_logs(action=discord.AuditLogAction.bot_add).find(check)
-	await bot_entry.user.send("Hello! Thanks for inviting me to " + guild.name + "! Please type !botsetup in any channel to get started. Please remember that in order to kick/mute etc, my role must be above everyone else's.")
+	await bot_entry.user.send("Hello! Thanks for inviting me to " + guild.name + "! Please setup all settings with !help Settings. Please remember that in order to kick/mute etc, my role must be above everyone else's.")
 
 	with open('serverprefs.json', 'r') as s:
 		serverprefs = json.load(s)
@@ -67,6 +65,7 @@ async def on_member_join(member):
 			serverprefs = json.load(s)
 	########################################
 	### AUTOROLE
+	await prefs.checkKeys(member.guild)
 	sjs = serverprefs[str(member.guild.id)]
 
 	if sjs['arole1'] != '':
@@ -113,6 +112,7 @@ async def on_message(message):
 	else:
 		with open('users.json', 'r') as f:
 			users = json.load(f)
+		await prefs.checkKeys(message.author.guild)
 		await leveling.createUserIfNeeded(users, message.author)
 		await leveling.addXpCheckLevel(users, message.author, message.channel)
 		await leveling.updateRanks(users, message.author) 
@@ -131,7 +131,7 @@ async def on_command_error(ctx, error):
 		await ctx.send(ctx.message.author.mention + ":  this is not a command!")
 
 ### RUN
-bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.5EAFgxQUdBzE57GpIdF0JDMAUq4')
+bot.run('NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.eJhdw0k3hi3wSdGjUMOQvUvxhpY')
 
 # TEST: NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.eJhdw0k3hi3wSdGjUMOQvUvxhpY
 

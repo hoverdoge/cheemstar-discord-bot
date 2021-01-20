@@ -1,6 +1,7 @@
 from discord.ext import commands
 import json
 import discord
+from discord.utils import get
 
 class Settings(commands.Cog):
 	"""setup, welcomechannel"""
@@ -26,35 +27,41 @@ class Settings(commands.Cog):
 	### WELCOME CHANNEL ###
 	@commands.command()
 	@commands.has_permissions(manage_roles=True) 
-	async def autorole(self, ctx, role):
+	async def autorole(self, ctx):
 		"""`!autorole ROLE` - gives new members a certain role (up to 5 addable) - requires manage roles"""
 		with open('serverprefs.json', 'r') as s:
 			serverprefs = json.load(s)
 		########################################
+		role = "ERR_CONTACT_DEV"
 		svr = str(ctx.message.guild.id)
+		role = str(ctx.message.content)[10:]
 
-		if serverprefs[svr]['arole1'] == "":
-			serverprefs[svr]['arole1'] = role
-			await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
-		elif serverprefs[svr]['arole2'] == "":
-			serverprefs[svr]['arole2'] = role
-			await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
-		elif serverprefs[svr]['arole3'] == "":
-			serverprefs[svr]['arole3'] = role
-			await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
-		elif serverprefs[svr]['arole4'] == "":
-			serverprefs[svr]['arole4'] = role
-			await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
-		elif serverprefs[svr]['arole5'] == "":
-			serverprefs[svr]['arole5'] = role
-			await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
+		if not get(ctx.guild.roles, name=role):
+			await ctx.message.channel.send("Role `" + role + "` does not exist.")
+
 		else:
-			await ctx.message.channel.send("You already have 5 roles. Your autorole list has been cleared.")
-			serverprefs[svr]['arole1'] = ""
-			serverprefs[svr]['arole2'] = ""
-			serverprefs[svr]['arole3'] = ""
-			serverprefs[svr]['arole4'] = ""
-			serverprefs[svr]['arole5'] = ""
+			if serverprefs[svr]['arole1'] == "":
+				serverprefs[svr]['arole1'] = role
+				await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
+			elif serverprefs[svr]['arole2'] == "":
+				serverprefs[svr]['arole2'] = role
+				await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
+			elif serverprefs[svr]['arole3'] == "":
+				serverprefs[svr]['arole3'] = role
+				await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
+			elif serverprefs[svr]['arole4'] == "":
+				serverprefs[svr]['arole4'] = role
+				await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
+			elif serverprefs[svr]['arole5'] == "":
+				serverprefs[svr]['arole5'] = role
+				await ctx.message.channel.send("`" + str(role) + "` will now be added to all members upon joining.")
+			else:
+				await ctx.message.channel.send("You already have 5 roles. Your autorole list has been cleared.")
+				serverprefs[svr]['arole1'] = ""
+				serverprefs[svr]['arole2'] = ""
+				serverprefs[svr]['arole3'] = ""
+				serverprefs[svr]['arole4'] = ""
+				serverprefs[svr]['arole5'] = ""
  
 
 		########################################
