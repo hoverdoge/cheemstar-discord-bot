@@ -3,8 +3,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageColor
 import os
 import cmask
 from discord.utils import get
-
-xpToAdd = 1
+import json
 
 
 async def createUserIfNeeded(users, user):
@@ -18,10 +17,11 @@ async def createUserIfNeeded(users, user):
         users[uid]['user'] = user.id
 
 
-async def addXpCheckLevel(users, user, channel):
+async def addXpCheckLevel(users, user, channel, xpToAdd = 1):
     uid = str(user.guild.id) + str(user.id)
     pastLevel = int(users[uid]['level'])
     users[uid]['xp'] += xpToAdd
+    print(users[uid]['xp'])
     newLevel = int(users[uid]['xp'] ** 1 / 20)
     ### if leveled up
     if pastLevel < newLevel:
@@ -34,7 +34,6 @@ async def addXpCheckLevel(users, user, channel):
         embed.set_thumbnail(url=(pfp))
         await channel.send(embed=embed)
         users[uid]['level'] = newLevel
-
 
 async def get_xp(users, user):
     uid = str(user.guild.id) + str(user.id)

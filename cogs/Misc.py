@@ -3,7 +3,7 @@ import discord
 import random
 
 class Misc(commands.Cog):
-	"""help, coinflip, poll"""
+	"""help, coinflip, poll, tts"""
 	def __init__(self, bot):
 		self.bot = bot
 	@commands.command()
@@ -83,6 +83,17 @@ class Misc(commands.Cog):
 					if len(prms) >= 7:
 						await embedm.add_reaction(prms[6].strip())	
 
+	@commands.command()
+	@commands.has_permissions(send_tts_messages=True)
+	async def tts(self, ctx):
+		"""`!tts *message*` - splits up message to bypass tts limit - requires tts permission."""
+		msg = ctx.message.content[5:]
+		ttsArr = [msg[i:i+200] for i in range(0, len(msg), 200)]
+		length = len(ttsArr)
+		i = 0
+		while i < length:
+			await ctx.send(ttsArr[i], tts=True)
+			i += 1
 
 def setup(bot):
 	bot.add_cog(Misc(bot))
