@@ -131,8 +131,8 @@ async def on_command_error(ctx, error):
 		await ctx.send(ctx.message.author.mention + ":  this is not a command!")
 
 ### RUN
-bot.run('NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.eJhdw0k3hi3wSdGjUMOQvUvxhpY')
+bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.OYhULHGId2K07_YZaYCT7ewfSfc')
 
 # TEST: NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.eJhdw0k3hi3wSdGjUMOQvUvxhpY
 
-# NORMAL: NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.5EAFgxQUdBzE57GpIdF0JDMAUq4
+# NORMAL: NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.OYhULHGId2K07_YZaYCT7ewfSfc
