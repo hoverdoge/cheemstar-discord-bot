@@ -12,6 +12,7 @@ class Points(commands.Cog):
 		"""Gets level and amount of XP"""
 		with open('users.json', 'r') as f:
 			users = json.load(f)
+		##################################
 		if member == "":
 			user = ctx.message.author
 		else:

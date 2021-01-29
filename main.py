@@ -115,10 +115,10 @@ async def on_message(message):
 		await prefs.checkKeys(message.author.guild)
 		await leveling.createUserIfNeeded(users, message.author)
 		await leveling.addXpCheckLevel(users, message.author, message.channel)
-		await leveling.updateRanks(users, message.author) 
-		await bot.process_commands(message)
+		await leveling.updateRanks(users, message.author)
 		with open('users.json', 'w') as f:
 			json.dump(users, f)
+		await bot.process_commands(message)
 	await meme.check(message)
 ######## COMMANDS ###################################
 
