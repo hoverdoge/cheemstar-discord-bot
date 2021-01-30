@@ -21,7 +21,6 @@ async def addXpCheckLevel(users, user, channel, xpToAdd = 1):
     uid = str(user.guild.id) + str(user.id)
     pastLevel = int(users[uid]['level'])
     users[uid]['xp'] += xpToAdd
-    print(users[uid]['xp'])
     newLevel = int(users[uid]['xp'] ** 1 / 20)
     ### if leveled up
     if pastLevel < newLevel:
