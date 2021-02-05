@@ -1,4 +1,5 @@
 import math
+import discord
 
 millnames = ['', 'k', 'm', 'b', 't']
 
@@ -9,3 +10,4 @@ def abbrevNum(n):
                          int(math.floor(0 if n == 0 else math.log10(abs(n)) / 3))))
 
     return '{:.0f}{}'.format(n / 10 ** (3 * millidx), millnames[millidx])
+
