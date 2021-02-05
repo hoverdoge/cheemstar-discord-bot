@@ -4,7 +4,8 @@ import os
 import cmask
 from discord.utils import get
 import json
-
+import math
+import funcs
 
 async def createUserIfNeeded(users, user):
     uid = str(user.guild.id) + str(user.id)
@@ -136,19 +137,8 @@ async def makeXpCard(message, user, xp, lvl, nlvl, nxp, rank):
     ##################
     ### XP DISPLAY ###
     ##################
-    if int(xp >= 1000):
-        sig = ""
-        if 1000 <= int(xp) < 1000000:
-            sig = "k"
-        elif 1000000 <= int(xp) < 1000000000:
-            sig = "m"
-        # gets first digit
-        fxp = str(xp)[0]
-        sxp = str(xp)[1]
-        xp = str(fxp) + "." + str(sxp) + str(sig)
-        xpDraw = ImageDraw.Draw(background)
-    else:
-        xpDraw = ImageDraw.Draw(background)
+    xp = funcs.abbrevNum(int(xp))
+    xpDraw = ImageDraw.Draw(background)
 
         # centers text
     w, h = fnt.getsize(str(xp))
@@ -164,19 +154,7 @@ async def makeXpCard(message, user, xp, lvl, nlvl, nxp, rank):
     ###################
     ### LVL DISPLAY ###
     ###################
-    if int(lvl >= 1000):
-        sig = ""
-        if 1000 <= int(lvl) < 1000000:
-            sig = "k"
-        elif 1000000 <= int(lvl) < 1000000000:
-            sig = "m"
-        # gets first digit
-        flvl = str(lvl)[0]
-        slvl = str(lvl)[1]
-        lvl = str(flvl) + "." + str(slvl) + str(sig)
-        lvlDraw = ImageDraw.Draw(background)
-    else:
-        lvlDraw = ImageDraw.Draw(background)
+    lvl = funcs.abbrevNum(lvl)
 
     lvlDraw = ImageDraw.Draw(background)
     # centers text
