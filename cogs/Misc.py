@@ -1,4 +1,5 @@
 from discord.ext import commands
+from discord.utils import get
 import discord
 import random
 
@@ -94,6 +95,21 @@ class Misc(commands.Cog):
 		while i < length:
 			await ctx.send(ttsArr[i], tts=True)
 			i += 1
+
+	@commands.command()
+	@commands.is_owner()
+	async def opendoor(self, ctx, member : discord.Member):
+		if ctx.guild.id == 489265044056440844:
+			role = get(ctx.guild.roles, name="key")
+			await member.add_roles(role)
+
+	@commands.command()
+	@commands.is_owner()
+	async def closedoor(self, ctx, member : discord.Member):
+		if ctx.guild.id == 489265044056440844:
+			role = get(ctx.guild.roles, name="key")
+			await member.remove_roles(role)
+
 
 def setup(bot):
 	bot.add_cog(Misc(bot))
