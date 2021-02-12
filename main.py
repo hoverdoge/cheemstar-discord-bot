@@ -7,6 +7,7 @@ import discord
 from discord.ext import commands
 import json
 import os
+import asyncpg
 ### FILES
 import leveling
 import prefs
@@ -24,6 +25,8 @@ async def get_prefix(bot, message):
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command('help')
+async def create_db_pool():
+	bot.pg_con = await asyncpg.create_pool(database="CheemsDB", user="postgres", password="Josh@2125Ralston")
 
 @bot.event
 async def on_ready():
@@ -39,7 +42,7 @@ async def load(ctx, extension):
 async def unload(ctx, extension):
 	bot.unload_extension(f'cogs.{extension}')
 for filename in os.listdir('./cogs'):
-	if filename.endswith('.py'):
+	if filename.endswith('.py') and not filename.startswith("_"):
 		bot.load_extension(f'cogs.{filename[:-3]}')
 
 ### sends setup message on join
@@ -97,27 +100,17 @@ async def on_member_join(member):
 ######################
 ### LEVELING #########
 ######################
-	with open('users.json', 'r') as f:
-		users = json.load(f)
-	await leveling.createUserIfNeeded(users, member)
-	await leveling.updateRanks(users, member)
-	with open('users.json', 'w') as f:
-		json.dump(users, f)
-
+	await leveling.createUserIfNeeded(bot, member)
+	await leveling.addXpCheckLevelRanks(bot, member, "", 0)
 
 @bot.event
 async def on_message(message):
 	if message.author.id == 745135808159285358 or message.author.id == 762732820304232478:
 		pass
 	else:
-		with open('users.json', 'r') as f:
-			users = json.load(f)
 		await prefs.checkKeys(message.author.guild)
-		await leveling.createUserIfNeeded(users, message.author)
-		await leveling.addXpCheckLevel(users, message.author, message.channel)
-		await leveling.updateRanks(users, message.author)
-		with open('users.json', 'w') as f:
-			json.dump(users, f)
+		await leveling.createUserIfNeeded(bot, message.author)
+		await leveling.addXpCheckLevelRanks(bot, message.author, message.channel)
 		await bot.process_commands(message)
 	await meme.check(message)
 ######## COMMANDS ###################################
@@ -130,6 +123,7 @@ async def on_command_error(ctx, error):
 	if isinstance(error, commands.CommandNotFound):
 		await ctx.send(ctx.message.author.mention + ":  this is not a command!")
 
+bot.loop.run_until_complete(create_db_pool())
 ### RUN
 bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.qHnhRFRrx3j3msFvYAcUbcWOX-Y')
 

@@ -8,21 +8,17 @@ class Points(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 	@commands.command()
-	async def xp(self, ctx, member : discord.Member = ""):
+	async def xp(self, ctx, member: discord.Member = ""):
 		"""Gets level and amount of XP"""
-		with open('users.json', 'r') as f:
-			users = json.load(f)
-		##################################
 		if member == "":
 			user = ctx.message.author
 		else:
 			user = member
-
-		xp = await leveling.get_xp(users, user)
-		lvl = await leveling.get_level(users, user)
+		xp = await leveling.get_xp(self.bot, user)
+		lvl = await leveling.get_level(self.bot, user)
 		nlvl = int(lvl) + 1
 		nextxp = await leveling.get_level_xp(int(lvl) + 1)
-		rank = await leveling.get_rank(users, user)
+		rank = await leveling.get_rank(self.bot, user)
 		await leveling.makeXpCard(ctx.message, user, int(xp), int(lvl), nlvl, int(nextxp), int(rank))
 def setup(bot):
 	bot.add_cog(Points(bot))

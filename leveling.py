@@ -3,26 +3,30 @@ from PIL import Image, ImageDraw, ImageFont, ImageColor
 import os
 import cmask
 from discord.utils import get
-import json
 import math
 import funcs
 
-async def createUserIfNeeded(users, user):
-    uid = str(user.guild.id) + str(user.id)
-    if uid not in users:
-        users[uid] = {}
-        users[uid]['xp'] = 0
-        users[uid]['level'] = 0
-        users[uid]['rank'] = 0
-        users[uid]['server'] = user.guild.id
-        users[uid]['user'] = user.id
+
+async def createUserIfNeeded(bot, user):
+    """Takes bot and user as input. Creates a user entry if needed"""
+    sid = str(user.guild.id)
+    usid = str(user.id)
+    uid = sid + usid
+    userObj = await bot.pg_con.fetch("SELECT * FROM users WHERE uniqueid = $1", uid)
+
+    if not userObj:
+        await bot.pg_con.execute("INSERT INTO users (level, xp, uniqueid, serverid, userID, rank) VALUES (0, 1, $1, $2, $3, 0)", uid, sid, usid)
 
 
-async def addXpCheckLevel(users, user, channel, xpToAdd = 1):
+async def addXpCheckLevelRanks(bot, user, channel="", xpToAdd = 1):
+    """Adds XP and checks levels and ranks. Takes bot, user, channel, and xpToAdd as input."""
+    sid = str(user.guild.id)
     uid = str(user.guild.id) + str(user.id)
-    pastLevel = int(users[uid]['level'])
-    users[uid]['xp'] += xpToAdd
-    newLevel = int(users[uid]['xp'] ** 1 / 20)
+    userObj = await bot.pg_con.fetchrow("SELECT * FROM users WHERE uniqueID = $1", uid)
+    pastLevel = int(userObj['level'])
+    await bot.pg_con.execute("UPDATE users SET xp = $1 WHERE uniqueID = $2", userObj['xp'] + xpToAdd, uid)
+
+    newLevel = int(userObj['xp'] ** 1 / 20)
     ### if leveled up
     if pastLevel < newLevel:
         pfp = user.avatar_url
@@ -33,26 +37,38 @@ async def addXpCheckLevel(users, user, channel, xpToAdd = 1):
         )
         embed.set_thumbnail(url=(pfp))
         await channel.send(embed=embed)
-        users[uid]['level'] = newLevel
+        await bot.pg_con.execute("UPDATE users SET level = $1 WHERE uniqueID = $2", newLevel, uid)
+    ### updates ranks
+    usersInServer = await bot.pg_con.fetch("SELECT * FROM users WHERE serverID = $1", sid)
+    uisDict = [dict(row) for row in usersInServer]
+    await updateRanks(bot, uisDict)
 
-async def get_xp(users, user):
+
+async def get_xp(bot, user):
+    """Takes bot and user as parameters. Returns a string with XP value."""
     uid = str(user.guild.id) + str(user.id)
-    return str(users[uid]['xp'])
+    users = await bot.pg_con.fetchrow("SELECT * FROM users WHERE uniqueID = $1", uid)
+    return str(users['xp'])
 
 
-async def get_level(users, user):
+async def get_level(bot, user):
+    """Takes bot and user as parameters. Returns a string with level value."""
     uid = str(user.guild.id) + str(user.id)
-    return str(users[uid]["level"])
+    users = await bot.pg_con.fetchrow("SELECT * FROM users WHERE uniqueID = $1", uid)
+    return str(users['level'])
 
 
 async def get_level_xp(level):
+    """Takes a level as input. Returns a string with that level's xp requirement."""
     xp = level * 20
     return str(xp)
 
 
-async def get_rank(users, user):
+async def get_rank(bot, user):
+    """Takes bot and user as parameters. Returns a string with rank value."""
     uid = str(user.guild.id) + str(user.id)
-    return str(users[uid]['rank'])
+    users = await bot.pg_con.fetchrow("SELECT * FROM users WHERE uniqueID = $1", uid)
+    return str(users['rank'])
 
 
 async def makeXpCard(message, user, xp, lvl, nlvl, nxp, rank):
@@ -187,18 +203,18 @@ async def makeXpCard(message, user, xp, lvl, nlvl, nxp, rank):
     os.remove('dimC.png')
 
 
-async def updateRanks(users, user):
+async def updateRanks(bot, usersInServerSql):
     usersInServer = {}
-    for i in users:
-        if users[i]['server'] == user.guild.id:
-            usersInServer[i] = users[i]['xp']
+    i = 0
+    while i < len(usersInServerSql):
+        uid = usersInServerSql[i]['uniqueid']
+        usersInServer[uid] = usersInServerSql[i]['xp']
+        i += 1
     ### sorts all users in server
     usersInServer = dict(sorted(usersInServer.items(), key=lambda x: x[1], reverse=True))
     listUsersInServer = list(usersInServer.keys())
     ### assigns rank
-    for uid in users:
-        n = 1
-        for user in listUsersInServer:
-            if uid == user:
-                users[uid]['rank'] = n
-            n += 1
+    n = 1
+    for uid in listUsersInServer:
+        await bot.pg_con.execute("UPDATE users SET rank = $1 WHERE uniqueID = $2", n, uid)
+        n += 1

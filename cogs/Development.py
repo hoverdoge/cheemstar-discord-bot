@@ -10,31 +10,16 @@ class Development(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def givexp(self, ctx, member: discord.Member, xptg):
-        with open('users.json', 'r') as f:
-            users = json.load(f)
-        #####################################
         await ctx.send("`" + str(member) + "`,`+" + str(xptg) + "`")
-        await leveling.createUserIfNeeded(users, member)
-        await leveling.addXpCheckLevel(users, member, ctx.message.channel, int(xptg))
-        await leveling.updateRanks(users, member)
-        #####################################
-        with open('users.json', 'w') as f:
-            json.dump(users, f)
+        await leveling.createUserIfNeeded(self.bot, member)
+        await leveling.addXpCheckLevelRanks(self.bot, member, ctx.message.channel, int(xptg))
 
     @commands.command()
     @commands.is_owner()
     async def nullxp(self, ctx, member: discord.Member):
-        with open('users.json', 'r') as f:
-            users = json.load(f)
-        #####################################
-        xptt = await leveling.get_xp(users, member)
+        xptt = await leveling.get_xp(self.bot, member)
         await ctx.send("taken")
-        await leveling.createUserIfNeeded(users, member)
-        users[str(member.guild.id) + str(member.id)]['xp'] = 1
-        users[str(member.guild.id) + str(member.id)]['level'] = 0
-        await leveling.updateRanks(users, member)
-        #####################################
-        with open('users.json', 'w') as f:
-            json.dump(users, f)
+        await leveling.createUserIfNeeded(self.bot, member)
+        await leveling.addXpCheckLevelRanks(self.bot, member, ctx.message.channel, (-1 * int(xptt)))
 def setup(bot):
     bot.add_cog(Development(bot))
