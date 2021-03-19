@@ -26,7 +26,7 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command('help')
 async def create_db_pool():
-	bot.pg_con = await asyncpg.create_pool(database="CheemsDB", user="postgres", password="Josh@2125Ralston")
+	bot.pg_con = await asyncpg.create_pool(database="cheemsdb", user="cheemsdb", password="mhq5q6dlozka0gjv") ### FOR TEST: USER IS "POSTGRES", PW is normal pw
 
 @bot.event
 async def on_ready():
