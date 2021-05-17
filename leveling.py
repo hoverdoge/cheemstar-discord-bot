@@ -15,16 +15,16 @@ async def createUserIfNeeded(bot, user):
     userObj = await bot.pg_con.fetch("SELECT * FROM users WHERE uniqueid = $1", uid)
 
     if not userObj:
-        await bot.pg_con.execute("INSERT INTO users (level, xp, uniqueid, serverid, userID, rank) VALUES (0, 1, $1, $2, $3, 0)", uid, sid, usid)
+        await bot.pg_con.execute("INSERT INTO users (level, xp, uniqueid, serverid, userid, rank) VALUES (0, 1, $1, $2, $3, 0)", uid, sid, usid)
 
 
 async def addXpCheckLevelRanks(bot, user, channel="", xpToAdd = 1):
     """Adds XP and checks levels and ranks. Takes bot, user, channel, and xpToAdd as input."""
     sid = str(user.guild.id)
     uid = str(user.guild.id) + str(user.id)
-    userObj = await bot.pg_con.fetchrow("SELECT * FROM users WHERE uniqueID = $1", uid)
+    userObj = await bot.pg_con.fetchrow("SELECT * FROM users WHERE uniqueid = $1", uid)
     pastLevel = int(userObj['level'])
-    await bot.pg_con.execute("UPDATE users SET xp = $1 WHERE uniqueID = $2", userObj['xp'] + xpToAdd, uid)
+    await bot.pg_con.execute("UPDATE users SET xp = $1 WHERE uniqueid = $2", userObj['xp'] + xpToAdd, uid)
 
     newLevel = int(userObj['xp'] ** 1 / 20)
     ### if leveled up

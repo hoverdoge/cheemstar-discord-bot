@@ -26,7 +26,7 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command('help')
 async def create_db_pool():
-	bot.pg_con = await asyncpg.create_pool("postgres://cheemsdb:mhq5q6dlozka0gjv@app-8195e3b5-3c24-412a-9ba1-deaa67038db1-do-user-8553544-0.b.db.ondigitalocean.com:25060/cheemsdb") ### FOR TEST: USER IS "POSTGRES", PW is normal pw
+	bot.pg_con = await asyncpg.create_pool("postgresql://cheemsdb:ao4y08gl4ilaj9hp@app-47c93632-5c00-4baa-ba39-f5fcf276b4d3-do-user-8553544-0.b.db.ondigitalocean.com:25060/cheemsdb?sslmode=require") ### FOR TEST: USER IS "POSTGRES", PW is normal pw
 
 @bot.event
 async def on_ready():
@@ -125,8 +125,8 @@ async def on_command_error(ctx, error):
 
 bot.loop.run_until_complete(create_db_pool())
 ### RUN
-bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.qHnhRFRrx3j3msFvYAcUbcWOX-Y')
+bot.run('LThERmt-QbLm6TDEtgrULhox8SOLQJe0')
 
 # TEST: NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.NMLNwb9Mn9pavgLl9bS2RpDKk_g
 
-# NORMAL: NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.qHnhRFRrx3j3msFvYAcUbcWOX-Y
+# NORMAL: LThERmt-QbLm6TDEtgrULhox8SOLQJe0
