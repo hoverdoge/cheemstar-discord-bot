@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="CheemstarDB" uuid="7a0d0a25-4b85-42b9-a45e-35df7511e637">
+    <data-source source="LOCAL" name="cheemsdb" uuid="9c87d688-b488-43d8-a976-365fb884e11a">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
