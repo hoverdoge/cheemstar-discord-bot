@@ -17,6 +17,5 @@ async def addServerIfNeeded(server, bot):
 
 async def getPfx(server, bot):
 	sid = str(server.id)
-	srow = await bot.pg_con.fetch("SELECT * FROM serverprefs WHERE serverid = $1", sid)
-
-	return srow['prefix']
+	srow = await bot.pg_con.fetch("SELECT prefix FROM serverprefs WHERE serverid = $1", sid)
+	return srow
