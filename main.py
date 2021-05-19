@@ -121,7 +121,7 @@ async def on_command_error(ctx, error):
 
 bot.loop.run_until_complete(create_db_pool())
 ### RUN
-bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.6s7_Lka26aKOYj7pZVKOs2nK8z0')
+bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.xabhkiQsaXqOj2ogoADA6zVN41s')
 
 # TEST: NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.NMLNwb9Mn9pavgLl9bS2RpDKk_g
 
