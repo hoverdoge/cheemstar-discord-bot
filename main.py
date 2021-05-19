@@ -60,8 +60,7 @@ async def on_guild_join(guild):
         return event.target.id == bot.user.id
 
     bot_entry = await guild.audit_logs(action=discord.AuditLogAction.bot_add).find(check)
-    await bot_entry.user.send(
-        "Hello! Thanks for inviting me to " + guild.name + "! Please setup all settings with !help Settings. Please remember that in order to kick/mute etc, my role must be above everyone else's.")
+    await bot_entry.user.send("Hello! Thanks for inviting me to " + guild.name + "! Please setup all settings with !help Settings. Please remember that in order to kick/mute etc, my role must be above everyone else's.")
     await prefs.addServerIfNeeded(guild, bot)
 
 

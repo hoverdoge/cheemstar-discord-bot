@@ -10,7 +10,7 @@ async def addServerIfNeeded(server, bot):
 		await bot.pg_con.fetch("SELECT * FROM serverprefs WHERE serverid = $1", sid)
 		return True
 	except: # if server doesn't exist in table
-		await bot.pg_con.execute("INSERT INTO serverprefs (wchnl, arole1, arole2, arole3, arole4, arole5, prefix, serverid) VALUES ( , , , , , ,!, $1)", sid)
+		await bot.pg_con.execute("INSERT INTO serverprefs (wchnl, arole1, arole2, arole3, arole4, arole5, prefix, serverid) VALUES (NULL,NULL,NULL,NULL,NULL,NULL,!, $1)", sid)
 		return False
 
 
