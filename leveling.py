@@ -218,3 +218,4 @@ async def updateRanks(bot, usersInServerSql):
     for uid in listUsersInServer:
         await bot.pg_con.execute("UPDATE users SET rank = $1 WHERE uniqueID = $2", n, uid)
         n += 1
+

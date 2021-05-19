@@ -20,5 +20,19 @@ class Points(commands.Cog):
 		nextxp = await leveling.get_level_xp(int(lvl) + 1)
 		rank = await leveling.get_rank(self.bot, user)
 		await leveling.makeXpCard(ctx.message, user, int(xp), int(lvl), nlvl, int(nextxp), int(rank))
+
+	@commands.command()
+	async def textxp(self, ctx, member: discord.Member = ""):
+		"""Gets level and amount of XP, but in text form"""
+		if member == "":
+			user = ctx.message.author
+		else:
+			user = member
+		xp = await leveling.get_xp(self.bot, user)
+		lvl = await leveling.get_level(self.bot, user)
+		nlvl = int(lvl) + 1
+		nextxp = await leveling.get_level_xp(int(lvl) + 1)
+		rank = await leveling.get_rank(self.bot, user)
+		ctx.send("`" + user + " has " + xp + "xp, is level " + lvl + " and is ranked " + rank + ". Next XP levelup is at " + nextxp + "xp.`")
 def setup(bot):
 	bot.add_cog(Points(bot))
