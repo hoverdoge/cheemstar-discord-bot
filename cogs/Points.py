@@ -33,6 +33,6 @@ class Points(commands.Cog):
 		nlvl = int(lvl) + 1
 		nextxp = await leveling.get_level_xp(int(lvl) + 1)
 		rank = await leveling.get_rank(self.bot, user)
-		ctx.send("`" + user + " has " + xp + "xp, is level " + lvl + " and is ranked " + rank + ". Next XP levelup is at " + nextxp + "xp.`")
+		await ctx.send("`" + user + " has " + xp + "xp, is level " + lvl + " and is ranked " + rank + ". Next XP levelup is at " + nextxp + "xp.`")
 def setup(bot):
 	bot.add_cog(Points(bot))
