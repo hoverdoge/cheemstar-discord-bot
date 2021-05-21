@@ -13,7 +13,11 @@ class Development(commands.Cog):
     async def givexp(self, ctx, member: discord.Member, xptg):
         await ctx.send("`" + str(member) + "`,`+" + str(xptg) + "`")
         await leveling.createUserIfNeeded(self.bot, member)
-        await leveling.addXpCheckLevelRanks(self.bot, member, ctx.message.channel, int(xptg))
+        uid = str(member.guild.id) + str(member.id)
+        userObj = await self.bot.pg_con.fetchrow("SELECT * FROM users WHERE uniqueid = $1", uid)
+        oldXp = userObj['xp']
+        await self.bot.pg_con.execute("UPDATE users SET xp = $1 WHERE uniqueid = $2", xptg + oldXp, uid)
+        await leveling.addXpCheckLevelRanks(self.bot, member, ctx.message.channel, 0)
 
     @commands.command()
     @commands.is_owner()
