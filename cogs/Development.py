@@ -4,6 +4,7 @@ import leveling
 import discord
 
 class Development(commands.Cog):
+    """don't even try, you can't use any of these"""
     def __init__(self, bot):
         self.bot = bot
 

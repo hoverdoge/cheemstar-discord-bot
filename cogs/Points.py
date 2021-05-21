@@ -4,7 +4,7 @@ import leveling
 import discord
 
 class Points(commands.Cog):
-	"""xp"""
+	"""xp, textxp"""
 	def __init__(self, bot):
 		self.bot = bot
 	@commands.command()
@@ -30,9 +30,8 @@ class Points(commands.Cog):
 			user = member
 		xp = await leveling.get_xp(self.bot, user)
 		lvl = await leveling.get_level(self.bot, user)
-		nlvl = int(lvl) + 1
 		nextxp = await leveling.get_level_xp(int(lvl) + 1)
 		rank = await leveling.get_rank(self.bot, user)
-		await ctx.send("`" + user + " has " + xp + "xp, is level " + lvl + " and is ranked " + rank + ". Next XP levelup is at " + nextxp + "xp.`")
+		await ctx.send("`" + str(user) + " has " + str(xp) + "xp, is level " + str(lvl) + " and is ranked " + str(rank) + ". Next XP levelup is at " + str(nextxp) + "xp.`")
 def setup(bot):
 	bot.add_cog(Points(bot))

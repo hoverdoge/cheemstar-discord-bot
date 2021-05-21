@@ -27,9 +27,8 @@ bot.remove_command('help')
 
 
 async def create_db_pool():
-    bot.pg_con = await asyncpg.create_pool(
-        "postgresql://cheemsdb:ao4y08gl4ilaj9hp@app-47c93632-5c00-4baa-ba39-f5fcf276b4d3-do-user-8553544-0.b.db.ondigitalocean.com:25060/cheemsdb?sslmode=require")  ### FOR TEST: USER IS "POSTGRES", PW is normal pw
-
+    bot.pg_con = await asyncpg.create_pool("postgresql://cheemsdb:ao4y08gl4ilaj9hp@app-47c93632-5c00-4baa-ba39-f5fcf276b4d3-do-user-8553544-0.b.db.ondigitalocean.com:25060/cheemsdb?sslmode=require")
+    #bot.pg_con = await asyncpg.create_pool("postgresql://localhost:5432/postgres")
 
 @bot.event
 async def on_ready():
@@ -67,7 +66,7 @@ async def on_guild_join(guild):
 ### on join
 @bot.event
 async def on_member_join(member):
-    sjs = await bot.pg_con.fetch("SELECT * FROM serverprefs WHERE serverid = $1", member.guild.id)
+    sjs = await bot.pg_con.fetchrow("SELECT * FROM serverprefs WHERE serverid = $1", str(member.guild.id))
 
     if sjs['arole1'] != ' ':
         role = discord.utils.get(member.guild.roles, name=str(sjs['arole1']))
@@ -86,9 +85,13 @@ async def on_member_join(member):
         await member.add_roles(role)
 
     ### WELCOME MESSAGE
-    cid = sjs['wchnl']
-    channel = discord.utils.get(member.guild.channels, id=cid)
-    await channel.send("Welcome to " + str(member.guild.name) + ", " + member.mention + "!")
+    cid = int(sjs['wchnl'])
+    chn = discord.utils.get(member.guild.channels, id=cid)
+    try:
+        await chn.send("Welcome to " + str(member.guild.name) + ", " + member.mention + "!")
+    except:
+        pass
+
 
     ######################
     ### LEVELING #########
@@ -102,6 +105,7 @@ async def on_message(message):
     if message.author.id == 745135808159285358 or message.author.id == 762732820304232478:
         pass
     else:
+        await prefs.addServerIfNeeded(message.guild, bot)
         await leveling.createUserIfNeeded(bot, message.author)
         await leveling.addXpCheckLevelRanks(bot, message.author, message.channel)
         await bot.process_commands(message)
@@ -121,8 +125,8 @@ async def on_command_error(ctx, error):
 
 bot.loop.run_until_complete(create_db_pool())
 ### RUN
-bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.xabhkiQsaXqOj2ogoADA6zVN41s')
+bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.rP7b-0Zx4MOFebqAe5U-v13w_-I')
 
-# TEST: NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.NMLNwb9Mn9pavgLl9bS2RpDKk_g
+# TEST: NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.OFPTE_P7ZCqWj3HE3ryCfmTBIS0
 
-# NORMAL: NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.6s7_Lka26aKOYj7pZVKOs2nK8z0
+# NORMAL: NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.rP7b-0Zx4MOFebqAe5U-v13w_-I
