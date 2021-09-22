@@ -126,5 +126,11 @@ class Misc(commands.Cog):
             spec_role = get(ctx.guild.roles, name=".")
             await member.add_roles(spec_role)
         await ctx.message.delete()
+
+    #afk
+    @commands.command()
+    async def afk(self, ctx):
+        """`!afk` - mark self as afk when pinged"""
+        await ctx.send("
 def setup(bot):
     bot.add_cog(Misc(bot))
