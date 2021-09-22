@@ -131,6 +131,6 @@ class Misc(commands.Cog):
     @commands.command()
     async def afk(self, ctx):
         """`!afk` - mark self as afk when pinged"""
-        await ctx.send("
+        await ctx.send("You are AFK")
 def setup(bot):
     bot.add_cog(Misc(bot))
