@@ -13,7 +13,6 @@ async def createUserIfNeeded(bot, user):
     usid = str(user.id)
     uid = sid + usid
     userObj = await bot.pg_con.fetch("SELECT * FROM users WHERE uniqueid = $1", uid)
-
     if not userObj:
         await bot.pg_con.execute("INSERT INTO users (level, xp, uniqueid, serverid, userid, rank) VALUES (0, 1, $1, $2, $3, 0)", uid, sid, usid)
 
