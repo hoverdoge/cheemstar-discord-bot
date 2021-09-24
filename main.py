@@ -12,7 +12,11 @@ import asyncpg
 import leveling
 import prefs
 import meme
+import logging
 
+
+
+logging.basicConfig(level=logging.INFO)
 
 ######################
 ### INITIALIZATION ###
@@ -92,7 +96,6 @@ async def on_member_join(member):
     except:
         pass
 
-
     ######################
     ### LEVELING #########
     ######################
@@ -125,7 +128,7 @@ async def on_command_error(ctx, error):
 
 bot.loop.run_until_complete(create_db_pool())
 ### RUN
-bot.run('NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.90TFc_Mevr4xSCsaud-9tU65Pkk')
+bot.run('NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.tGt1zNxkLplmd8n06QmHpSRVlBE')
 
 #NORMAL: NzQ1MTM1ODA4MTU5Mjg1MzU4.XztXzA.90TFc_Mevr4xSCsaud-9tU65Pkk
 #TEST: NzYyNzMyODIwMzA0MjMyNDc4.X3tcSw.tGt1zNxkLplmd8n06QmHpSRVlBE
