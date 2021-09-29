@@ -25,8 +25,12 @@ async def addXpCheckLevelRanks(bot, user, channel="", xpToAdd = 1):
     pastLevel = int(userObj['level'])
     await bot.pg_con.execute("UPDATE users SET xp = $1 WHERE uniqueid = $2", userObj['xp'] + xpToAdd, uid)
 
-    newLevel = int(userObj['xp'] ** 1 / 20)
-    ### if leveled up
+    newLevel = int(userObj['xp'] ** 1 / 100)
+    
+    ### if level is lower now (from nullxp) then set to 0 and check if leveled up
+    if pastLevel > newLevel:
+        await bot.pg_con.execute("UPDATE users SET level = $1 WHERE uniqueID = $2", 0, uid)
+### if leveled up
     if pastLevel < newLevel:
         pfp = user.avatar_url
         embed = discord.Embed(
@@ -59,7 +63,7 @@ async def get_level(bot, user):
 
 async def get_level_xp(level):
     """Takes a level as input. Returns a string with that level's xp requirement."""
-    xp = level * 20
+    xp = level * 100
     return str(xp)
 
 
